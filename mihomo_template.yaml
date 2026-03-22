@@ -390,7 +390,6 @@ rules:
   - RULE-SET,not_cn_domain,节点选择
 
   # 国内
-  - RULE-SET,douyin_domain,直连
   - RULE-SET,cn_domain,直连
   - RULE-SET,accelerator_cn_domain,直连
   - RULE-SET,games_domain,直连
@@ -454,9 +453,6 @@ rule-providers:
   docker_domain:
     <<: *domain
     url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/docker.mrs"
-  douyin_domain:
-    <<: *domain
-    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/douyin.mrs"
   not_cn_domain:
     <<: *domain
     url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.mrs"
