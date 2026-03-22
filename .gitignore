@@ -1,0 +1,13 @@
+# 私人配置文件（含订阅链接等敏感信息）
+mihomo.yaml
+QuantumultX.conf
+Loon.conf
+
+# IDE
+.windsurfrules
+
+# 本地生成的规则（GitHub Actions 推送到 rules 分支）
+rules/
+
+# CodeChat
+codechat/

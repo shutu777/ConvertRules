@@ -1,0 +1,41 @@
+name: Convert Rules for QX & Loon
+
+on:
+  schedule:
+    # 每天 UTC 0:00 运行（北京时间 8:00）
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 支持手动触发
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/convert-rules.py'
+
+permissions:
+  contents: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Run conversion script
+        run: python scripts/convert-rules.py rules
+
+      - name: Deploy to rules branch
+        run: |
+          cd rules
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -b rules
+          git add -A
+          git commit -m "Auto-update rules $(date -u '+%Y-%m-%d %H:%M UTC')" || echo "No changes"
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push -f origin rules

@@ -1,0 +1,477 @@
+######### 锚点 start #######
+# 策略组相关
+pr: &pr
+  type: select
+  proxies:
+    [
+      节点选择,
+      香港节点,
+      台湾节点,
+      日本节点,
+      新加坡节点,
+      美国节点,
+      香港故转,
+      香港自动,
+      自动选择,
+      花云节点,
+      奶昔节点,
+      亏本节点,
+      全部节点,
+      直连,
+    ]
+
+# 这里是订阅更新和延迟测试相关的
+p: &p
+  type: http
+  interval: 86400
+  health-check:
+    enable: true
+    url: "https://www.gstatic.com/generate_204"
+    interval: 300
+  proxy: 直连
+
+######### 锚点 end #######
+
+# 机场订阅,名称不能重复
+proxy-providers:
+  Flower:
+    <<: *p
+    url: ""
+    # 节点前缀，便于区分
+    override:
+      additional-prefix: "花云 "
+    # 过滤流量广告节点
+    exclude-filter: "Traffic|Expire"
+  Nexitally:
+    <<: *p
+    url: ""
+  Kuiben:
+    <<: *p
+    url: ""
+    # 节点前缀，便于区分
+    override:
+      additional-prefix: "亏本 "
+    # 过滤流量广告节点
+    exclude-filter: "剩余流量|套餐到期"
+
+# 用于下载订阅时指定UA 内核名字
+global-ua: ClashMeta
+
+# http(s)/socks/mixed代理的用户验证 透明代理不开启
+#authentication:
+#- "user:password"
+
+# 全局配置
+# http(s) 代理端口
+port: 7890
+# socks4/4a/5 代理端口
+socks-port: 7891
+# 混合端口是一个特殊的端口,它同时支持 HTTP(S) 和 SOCKS5 协议。您可以使用任何支持 HTTP 或 SOCKS 代理的程序连接到这个端口
+mixed-port: 7892
+# redirect 透明代理端口,仅能代理 TCP 流量
+redir-port: 7893
+# tproxy 透明代理端口,可代理 TCP 与 UDP 流量
+tproxy-port: 7894
+ipv6: false
+# 允许其他设备经过 Clash 的代理端口访问互联网
+allow-lan: true
+# 开启统一延迟时,会计算 RTT,以消除连接握手等带来的不同类型节点的延迟差异
+unified-delay: true
+# tcp并发
+tcp-concurrent: true
+
+# 更改 geoip 使用文件,mmdb 或者 dat,可选 true/false,true为 dat,此项有默认值 false
+geodata-mode: false
+# GEO 文件加载模式
+geodata-loader: memconservative
+# 自动更新 GEO
+geo-auto-update: false
+# 更新间隔,单位为小时
+geo-update-interval: 24
+# 自定 GEO 下载地址
+geox-url:
+  geoip: "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat"
+  geosite: "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
+  mmdb: "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country-lite.mmdb"
+  asn: "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
+
+# UI
+external-controller: 0.0.0.0:9090
+secret: "shutu736"
+external-ui: ui
+external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip"
+
+# 匹配进程 always/strict/off
+find-process-mode: off
+global-client-fingerprint: chrome
+keep-alive-idle: 600
+keep-alive-interval: 15
+
+# 策略组选择和fakeip缓存
+profile:
+  # 储存 API 对策略组的选择,以供下次启动时使用
+  store-selected: true
+  # 储存 fakeip 映射表,域名再次发生连接时,使用原有映射地址
+  store-fake-ip: true
+
+# 流量嗅探 奈飞流媒体专用
+sniffer:
+  # 是否启用 sniffer
+  enable: false
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      # 覆盖全局override-destination设置
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  # 强制进行嗅探的域名列表,使用域名通配
+  force-domain:
+    - +.v2ex.com
+  # 跳过嗅探的域名列表,使用域名通配
+  skip-domain:
+    - "+.baidu.com"
+    - "Mijia Cloud"
+    - "dlg.io.mi.com"
+    - "+.push.apple.com"
+    - "+.apple.com"
+
+# 代理模式 只有裸核运行时才会生效
+tun:
+  enable: true
+  # tun 模式堆栈,如无使用问题,建议使用 mixed栈,默认 gvisor
+  # 可用值： system/gvisor/mixed
+  stack: mixed
+  # 最大传输单元,会影响极限状态下的速率,一般用户默认即可
+  mtu: 9000
+  # dns 劫持,将匹配到的连接导入内部 dns 模块,不书写协议则为 udp://
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+  # 自动设置全局路由,可以自动将全局流量路由进入 tun 网卡。
+  auto-route: true
+  # 带有 auto-route 的 auto-redirect 现在可以在路由器上按预期工作,无需干预
+  auto-redirect: true
+  # 自动选择流量出口接口,多出口网卡同时连接的设备建议手动指定出口网卡
+  auto-detect-interface: true
+
+# DNS模块
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: false
+  # 是否回应配置中的 hosts，默认 true
+  use-hosts: true
+  # 是否查询系统 hosts，默认 true
+  use-system-hosts: true
+  # dns 连接遵守路由规则，需配置 proxy-server-nameserver, 强烈不建议和 prefer-h3 一起使用
+  respect-rules: true
+  # 模式切换 redir-host / fake-ip
+  enhanced-mode: fake-ip
+  # fakeip 下的 IP 段设置,tun 的默认 IPV4 地址 也使用此值作为参考
+  fake-ip-range: 198.18.0.1/16
+  # 模式切换 whitelist/blacklist
+  # 黑名单模式表示如果匹配成功则不返回 Fake-IP, 白名单模式时只有匹配成功才返回 Fake-IP
+  fake-ip-filter-mode: blacklist
+  # fakeip 过滤,以下地址不会下发 fakeip 映射用于连接
+  fake-ip-filter:
+    - "+.lan"
+    - "+.local"
+    - "+.tymd.fun"
+    - "rule-set:private,cn_domain,accelerator_cn_domain,games_domain,personal_domain"
+  # 统一使用运行商上游的dns
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  proxy-server-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+
+proxies:
+  - name: "直连"
+    type: direct
+    udp: true
+
+# 策略组
+proxy-groups:
+  - name: 节点选择
+    type: select
+    proxies:
+      [
+        香港节点,
+        台湾节点,
+        日本节点,
+        新加坡节点,
+        美国节点,
+        香港故转,
+        香港自动,
+        自动选择,
+        花云节点,
+        奶昔节点,
+        亏本节点,
+        全部节点,
+        直连,
+      ]
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Global.png"
+
+  - name: YouTube
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/YouTube.png"
+
+  - name: Google
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Google_Search.png"
+  - name: AI
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png"
+
+  - name: Pornhub
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Pornhub.png"
+
+  - name: GitHub
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/GitHub.png"
+
+  - name: Microsoft
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Microsoft.png"
+
+  - name: TikTok
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/TikTok.png"
+
+  - name: Telegram
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Telegram.png"
+  
+  - name: Netflix
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Netflix.png"
+  
+  - name: Speedtest
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Speedtest.png"
+
+  - name: PayPal
+    <<: *pr
+    icon: "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/PayPal.png"
+
+  - name: Apple
+    type: select
+    proxies: [直连, 节点选择]
+    icon: "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Apple.png"
+
+  - name: 香港节点
+    type: select
+    include-all: true
+    filter: "(?i)港|hk|hongkong|hong kong"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/HK.png"
+
+  - name: 台湾节点
+    type: select
+    include-all: true
+    filter: "(?i)湾|tw|taiwan|tai wan"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/TW.png"
+
+  - name: 日本节点
+    type: select
+    include-all: true
+    filter: "(?i)日|jp|japan"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/JP.png"
+
+  - name: 新加坡节点
+    type: select
+    include-all: true
+    filter: "(?i)坡|sg|singapore"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/SG.png"
+
+  - name: 美国节点
+    type: select
+    include-all: true
+    filter: "(?i)美|us|unitedstates|united states"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/US.png"
+
+  - name: 香港故转
+    type: fallback
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/HK.png"
+
+  - name: 香港自动
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/HK.png"
+
+  - name: 自动选择
+    type: url-test
+    include-all: true
+    tolerance: 50
+    interval: 300
+    filter: "^((?!(直连)).)*$"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Auto.png"
+
+  - name: 花云节点
+    type: select
+    use:
+      - Flower
+    filter: "^((?!(直连)).)*$"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Flower.png"
+
+  - name: 奶昔节点
+    type: select
+    use:
+      - Nexitally
+    filter: "^((?!(直连)).)*$"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Nex.png"
+
+  - name: 亏本节点
+    type: select
+    use:
+      - Kuiben
+    filter: "^((?!(直连)).)*$"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Vpn.png"
+
+  - name: 全部节点
+    type: select
+    include-all: true
+    filter: "^((?!(直连)).)*$"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Static.png"
+
+  - name: 漏网之鱼
+    type: select
+    proxies:
+      [节点选择, 直连, 香港故转, 香港节点, 香港自动, 自动选择, 台湾节点, 日本节点, 新加坡节点, 美国节点, 全部节点]
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Final.png"
+
+# 路由规则
+rules:
+  # 直连
+  - RULE-SET,private_ip,直连,no-resolve
+  - IP-CIDR,156.225.19.0/8,直连,no-resolve
+  - RULE-SET,private,直连
+  - RULE-SET,personal_domain,直连
+  - DOMAIN-SUFFIX,btyjscl.com,直连 # 国内javdb api服务器直连
+  - DOMAIN-SUFFIX,gorafie.com,直连 # 弹幕api
+
+  # 全球指定分流
+  # mediahelp
+  - DOMAIN-KEYWORD,authcode,节点选择
+  # javdb
+  - DOMAIN-KEYWORD,javdb,Pornhub
+
+  # 全球
+  - RULE-SET,porn_domain,Pornhub
+  - RULE-SET,apple_domain,Apple
+  - RULE-SET,ai_domain,AI
+  - RULE-SET,github_domain,GitHub
+  - RULE-SET,docker_domain,GitHub
+  - RULE-SET,youtube_domain,YouTube
+  - RULE-SET,google_domain,Google
+  - RULE-SET,microsoft_domain,Microsoft
+  - RULE-SET,tiktok_domain,TikTok
+  - RULE-SET,speedtest_domain,Speedtest
+  - RULE-SET,telegram_domain,Telegram
+  - RULE-SET,netflix_domain,Netflix
+  - RULE-SET,paypal_domain,PayPal
+  - RULE-SET,google_ip,Google,no-resolve
+  - RULE-SET,netflix_ip,Netflix,no-resolve
+  - RULE-SET,telegram_ip,Telegram,no-resolve
+  - RULE-SET,not_cn_domain,节点选择
+
+  # 国内
+  - RULE-SET,cn_domain,直连
+  - RULE-SET,accelerator_cn_domain,直连
+  - RULE-SET,games_domain,直连
+  - RULE-SET,cn_ip,直连,no-resolve
+  - MATCH,漏网之鱼
+
+rule-anchor:
+  ip: &ip { type: http, interval: 86400, behavior: ipcidr, format: mrs }
+  domain: &domain { type: http, interval: 86400, behavior: domain, format: mrs }
+  text: &text { type: http, interval: 86400, behavior: domain, format: text }
+  yaml: &yaml { type: http, interval: 86400, behavior: classical, format: yaml }
+rule-providers:
+  private:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.mrs"
+  cn_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.mrs"
+  apple_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple-cn.mrs"
+  github_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/github.mrs"
+  youtube_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.mrs"
+  google_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.mrs"
+  telegram_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs"
+  netflix_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/netflix.mrs"
+  ai_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ai-chat-!cn.mrs"
+  microsoft_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft.mrs"
+  tiktok_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/tiktok.mrs"
+  paypal_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/paypal.mrs"
+  speedtest_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/ookla-speedtest.mrs"
+  games_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games.mrs"
+  accelerator_cn_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-game-accelerator-cn.mrs"
+  porn_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-porn.mrs"
+  docker_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/docker.mrs"
+  not_cn_domain:
+    <<: *domain
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.mrs"
+  personal_domain:
+    <<: *yaml
+    url: "https://sub.shutu736.me/share/file/personal?token=K150MHwC_9AxQ4iy-Dvo0"
+
+  private_ip:
+    <<: *ip
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs"
+  cn_ip:
+    <<: *ip
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs"
+  google_ip:
+    <<: *ip
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.mrs"
+  netflix_ip:
+    <<: *ip
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.mrs"
+  telegram_ip:
+    <<: *ip
+    url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs"
