@@ -32,6 +32,7 @@ DOMAIN_RULES = {
     "accelerator_cn_domain": "category-game-accelerator-cn",
     "porn_domain": "category-porn",
     "docker_domain": "docker",
+    "douyin_domain": "douyin",
     "not_cn_domain": "geolocation-!cn",
 }
 
