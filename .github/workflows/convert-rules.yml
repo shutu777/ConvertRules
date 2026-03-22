@@ -9,6 +9,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/convert-rules.py'
+      - '.github/workflows/convert-rules.yml'
 
 permissions:
   contents: write
