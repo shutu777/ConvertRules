@@ -28,14 +28,10 @@ jobs:
       - name: Run conversion script
         run: python scripts/convert-rules.py rules
 
-      - name: Deploy to rules branch
+      - name: Commit rules to main
         run: |
-          cd rules
-          git init
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b rules
-          git add -A
-          git commit -m "Auto-update rules $(date -u '+%Y-%m-%d %H:%M UTC')" || echo "No changes"
-          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          git push -f origin rules
+          git add rules/
+          git diff --cached --quiet && echo "No changes" || git commit -m "Auto-update rules $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push

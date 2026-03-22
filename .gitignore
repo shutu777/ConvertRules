@@ -6,8 +6,5 @@ Loon.conf
 # IDE
 .windsurfrules
 
-# 本地生成的规则（GitHub Actions 推送到 rules 分支）
-rules/
-
 # CodeChat
 codechat/
