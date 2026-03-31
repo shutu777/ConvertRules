@@ -263,8 +263,7 @@ proxy-groups:
     icon: "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/PayPal.png"
 
   - name: Apple
-    type: select
-    proxies: [直连, 节点选择]
+    <<: *pr
     icon: "https://cdn.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Apple.png"
 
   - name: 香港节点
