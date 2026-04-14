@@ -1,10 +1,13 @@
 # 私人配置文件（含订阅链接等敏感信息）
 mihomo.yaml
+mihomo_johnny.yaml
 QuantumultX.conf
 Loon.conf
+Egern.conf
 
 # IDE
 .windsurfrules
 
 # CodeChat
 codechat/
+.windsurf
