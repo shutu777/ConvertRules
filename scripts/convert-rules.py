@@ -33,6 +33,8 @@ DOMAIN_RULES = {
     "porn_domain": "category-porn",
     "docker_domain": "docker",
     "not_cn_domain": "geolocation-!cn",
+    "pt_cn_domain": "category-pt",
+    "binance_domain": "binance-pt",
 }
 
 # IP 规则映射: mihomo rule-provider name -> MetaCubeX geoip name
@@ -42,6 +44,12 @@ IP_RULES = {
     "google_ip": "google",
     "netflix_ip": "netflix",
     "telegram_ip": "telegram",
+}
+
+# YAML 格式规则映射: mihomo rule-provider name -> 自定义 URL
+YAML_RULES = {
+    "seedbox_domain": "https://nini618.oss-cn-hangzhou.aliyuncs.com/Clash/SeedBox.yaml",
+    "manual_direct_domain": "https://nini618.oss-cn-hangzhou.aliyuncs.com/Clash/ManualDirect.yaml",
 }
 
 
@@ -93,6 +101,44 @@ def convert_ip_line(line):
         return f"IP-CIDR,{line},no-resolve"
 
 
+def convert_yaml_rules(content):
+    """
+    转换 YAML 格式规则:
+    解析 Clash YAML 格式的 domain 和 ip 规则，转换为 QuantumultX 格式
+    """
+    import re
+    lines = []
+
+    # 提取 domain 规则
+    domain_pattern = re.compile(r"^\s*-\s+['\"]?([\w\.\-\*]+)['\"]?$")
+    # 提取 ip-cidr 规则
+    ip_pattern = re.compile(r"^\s*-\s+['\"]?([\d\./:]+)['\"]?,.*no-resolve")
+
+    for line in content.splitlines():
+        # 尝试匹配 domain 规则
+        domain_match = domain_pattern.match(line)
+        if domain_match:
+            domain = domain_match.group(1)
+            if domain.startswith("+."):
+                lines.append(f"DOMAIN-SUFFIX,{domain[2:]}")
+            elif domain.startswith("."):
+                lines.append(f"DOMAIN-SUFFIX,{domain[1:]}")
+            else:
+                lines.append(f"DOMAIN,{domain}")
+            continue
+
+        # 尝试匹配 IP 规则
+        ip_match = ip_pattern.match(line)
+        if ip_match:
+            ip = ip_match.group(1)
+            if ":" in ip:
+                lines.append(f"IP-CIDR6,{ip},no-resolve")
+            else:
+                lines.append(f"IP-CIDR,{ip},no-resolve")
+
+    return lines
+
+
 def process_rules(output_dir):
     """处理所有规则"""
     os.makedirs(output_dir, exist_ok=True)
@@ -131,6 +177,21 @@ def process_rules(output_dir):
             converted = convert_ip_line(raw_line)
             if converted:
                 lines.append(converted)
+
+        out_path = os.path.join(output_dir, f"{name}.list")
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines) + "\n")
+        print(f"  写入: {out_path} ({len(lines)} 条规则)")
+
+    # 处理 YAML 格式规则
+    print("\n=== 处理 YAML 格式规则 ===")
+    for name, url in YAML_RULES.items():
+        print(f"  下载: {name} <- {url}")
+        content = download(url)
+        if content is None:
+            continue
+
+        lines = convert_yaml_rules(content)
 
         out_path = os.path.join(output_dir, f"{name}.list")
         with open(out_path, "w", encoding="utf-8") as f:
