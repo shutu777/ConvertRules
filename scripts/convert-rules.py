@@ -34,7 +34,7 @@ DOMAIN_RULES = {
     "docker_domain": "docker",
     "not_cn_domain": "geolocation-!cn",
     "pt_cn_domain": "category-pt",
-    "binance_domain": "binance-pt",
+    "binance_domain": "binance",
 }
 
 # IP 规则映射: mihomo rule-provider name -> MetaCubeX geoip name
@@ -109,32 +109,34 @@ def convert_yaml_rules(content):
     import re
     lines = []
 
-    # 提取 domain 规则
-    domain_pattern = re.compile(r"^\s*-\s+['\"]?([\w\.\-\*]+)['\"]?$")
-    # 提取 ip-cidr 规则
-    ip_pattern = re.compile(r"^\s*-\s+['\"]?([\d\./:]+)['\"]?,.*no-resolve")
+    # 提取 Clash payload 格式的规则
+    # 匹配: - RULE-TYPE,value[,no-resolve] #comment
+    rule_pattern = re.compile(r"^\s*-\s+(DOMAIN-SUFFIX|DOMAIN|DOMAIN-KEYWORD|IP-CIDR|IP-CIDR6),([^,#\s]+)(?:,([^,#\s]+))?(?:\s*#\s*(.*))?$")
 
     for line in content.splitlines():
-        # 尝试匹配 domain 规则
-        domain_match = domain_pattern.match(line)
-        if domain_match:
-            domain = domain_match.group(1)
-            if domain.startswith("+."):
-                lines.append(f"DOMAIN-SUFFIX,{domain[2:]}")
-            elif domain.startswith("."):
-                lines.append(f"DOMAIN-SUFFIX,{domain[1:]}")
-            else:
-                lines.append(f"DOMAIN,{domain}")
-            continue
+        # 尝试匹配 Clash 规则
+        rule_match = rule_pattern.match(line)
+        if rule_match:
+            rule_type = rule_match.group(1)
+            value = rule_match.group(2)
+            no_resolve = rule_match.group(3)
 
-        # 尝试匹配 IP 规则
-        ip_match = ip_pattern.match(line)
-        if ip_match:
-            ip = ip_match.group(1)
-            if ":" in ip:
-                lines.append(f"IP-CIDR6,{ip},no-resolve")
-            else:
-                lines.append(f"IP-CIDR,{ip},no-resolve")
+            # 转换为 QuantumultX 格式
+            if rule_type in ["DOMAIN-SUFFIX", "DOMAIN", "DOMAIN-KEYWORD"]:
+                # 域名规则直接转换
+                if rule_type == "DOMAIN-SUFFIX":
+                    # 移除开头的 +. 或 .
+                    if value.startswith("+."):
+                        value = value[2:]
+                    elif value.startswith("."):
+                        value = value[1:]
+                qx_type = rule_type
+                resolve = "" if no_resolve == "no-resolve" else ",no-resolve"
+                lines.append(f"{qx_type},{value}{resolve}")
+            elif rule_type in ["IP-CIDR", "IP-CIDR6"]:
+                # IP 规则
+                resolve = ",no-resolve" if no_resolve == "no-resolve" or "no-resolve" in line else ""
+                lines.append(f"{rule_type},{value}{resolve}")
 
     return lines
 
