@@ -2,6 +2,7 @@
 mihomo.yaml
 mihomo_johnny.yaml
 QuantumultX_Johnny.conf
+surge_johnny.conf
 QuantumultX.conf
 Loon.conf
 Egern.conf
@@ -10,3 +11,9 @@ surge.conf
 # IDE
 .windsurfrules
 .windsurf
+
+# Python
+__pycache__/
+*.py[cod]
+
+docker-compose.yml
