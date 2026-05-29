@@ -1,1 +1,5 @@
-# Placeholder. Regenerate with scripts/convert-rules.py to fetch ManualProxies.yaml.
+DOMAIN-SUFFIX,tanhuatv.site,no-resolve
+DOMAIN-SUFFIX,emby.to,no-resolve
+DOMAIN-SUFFIX,jcnf.xyz,no-resolve
+DOMAIN-SUFFIX,us.kg,no-resolve
+DOMAIN-SUFFIX,workers.dev,no-resolve
