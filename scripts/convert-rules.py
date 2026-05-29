@@ -50,6 +50,7 @@ IP_RULES = {
 YAML_RULES = {
     "seedbox_domain": "https://nini618.oss-cn-hangzhou.aliyuncs.com/Clash/SeedBox.yaml",
     "manual_direct_domain": "https://nini618.oss-cn-hangzhou.aliyuncs.com/Clash/ManualDirect.yaml",
+    "manual_proxies_domain": "https://nini618.oss-cn-hangzhou.aliyuncs.com/Clash/ManualProxies.yaml",
     "personal_domain": "https://sub.shutu736.me/share/file/personal?token=K150MHwC_9AxQ4iy-Dvo0",
 }
 

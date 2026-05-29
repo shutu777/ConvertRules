@@ -17,3 +17,4 @@ __pycache__/
 *.py[cod]
 
 docker-compose.yml
+Loon-Johnny.conf
