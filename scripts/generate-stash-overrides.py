@@ -61,7 +61,7 @@ def build_convert_url(url: str, name: str) -> str:
     )
 
 
-def plugin_row(url: str, options: str | None) -> tuple[str, str, str]:
+def plugin_row(url: str, options: str | None) -> tuple[str, str, str, str]:
     name = plugin_name(url)
     convert_url = build_convert_url(url, name)
     install_url = "stash://install-override?url=" + quote(convert_url, safe="")
@@ -71,13 +71,13 @@ def plugin_row(url: str, options: str | None) -> tuple[str, str, str]:
         if policy_match:
             note = policy_match.group(1).strip()
 
-    return name, install_url, note
+    return name, install_url, convert_url, note
 
 
-def append_table(
+def append_plugins(
     lines: list[str],
     title: str,
-    rows: list[tuple[str, str, str]],
+    rows: list[tuple[str, str, str, str]],
     *,
     collapsed: bool = False,
 ) -> None:
@@ -89,14 +89,19 @@ def append_table(
     else:
         lines.extend([f"## {title}", ""])
 
-    lines.extend(
-        [
-            "| 插件 | 安装 | 备注 |",
-            "| --- | --- | --- |",
-        ]
-    )
-    for name, install_url, note in rows:
-        lines.append(f"| {name} | [Install]({install_url}) | {note} |")
+    for name, install_url, convert_url, note in rows:
+        lines.extend(
+            [
+                f"### {name}",
+                "",
+                f"- 外部打开：[Install]({install_url})",
+                f"- Stash 里点“从 URL 安装”时粘贴：`{convert_url}`",
+            ]
+        )
+        if note:
+            lines.append(f"- 策略：`{note}`")
+        lines.append("")
+
     lines.append("")
     if collapsed:
         lines.extend(["</details>", ""])
@@ -130,17 +135,18 @@ def main() -> None:
         "",
         "1. 在 Stash 导入 `stash.yaml`。",
         "2. 打开 `http://script.hub`，确认 Script Hub 页面能打开。",
-        "3. 回到这里，只点“最少先装”里的两个 `Install`。",
+        "3. 回到这里，先装“最少先装”里的两个插件。",
         "",
         "`stash.yaml` 是主配置；本文件只负责安装 Loon 插件转换后的 Stash 覆写。",
+        "如果你已经在 Stash 的覆写页面，点“从 URL 安装”，复制每个插件下面的 `http://script.hub/...` 地址粘贴进去。",
         "App 去广告和工具插件都折叠在下面，需要哪个再展开安装。",
         "如果某个安装链接没有反应，通常是插件源站临时不可访问，稍后重试即可。",
         "",
     ]
 
-    append_table(lines, "最少先装", core)
-    append_table(lines, "App 去广告，可选展开", ads, collapsed=True)
-    append_table(lines, "工具和解锁，可选展开", optional, collapsed=True)
+    append_plugins(lines, "最少先装", core)
+    append_plugins(lines, "App 去广告，可选展开", ads, collapsed=True)
+    append_plugins(lines, "工具和解锁，可选展开", optional, collapsed=True)
 
     Path(args.output).write_text("\n".join(lines), encoding="utf-8")
     print(f"Wrote {args.output} ({len(plugins)} plugins)")
