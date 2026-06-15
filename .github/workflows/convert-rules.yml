@@ -9,7 +9,6 @@ on:
     branches: [main]
     paths:
       - 'scripts/convert-rules.py'
-      - 'scripts/generate-stash-overrides.py'
       - 'Loon_template.conf'
       - '.github/workflows/convert-rules.yml'
 
@@ -34,13 +33,10 @@ jobs:
       - name: Run conversion script
         run: python scripts/convert-rules.py rules
 
-      - name: Generate Stash override checklist
-        run: python scripts/generate-stash-overrides.py Loon_template.conf -o stash_overrides.md
-
-      - name: Commit generated files to main
+      - name: Commit rules to main
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add rules/ stash_overrides.md
-          git diff --cached --quiet && echo "No changes" || git commit -m "Auto-update converted files $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git add rules/
+          git diff --cached --quiet && echo "No changes" || git commit -m "Auto-update rules $(date -u '+%Y-%m-%d %H:%M UTC')"
           git push
