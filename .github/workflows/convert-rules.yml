@@ -10,7 +10,6 @@ on:
     paths:
       - 'scripts/convert-rules.py'
       - 'scripts/generate-stash-overrides.py'
-      - 'Loon.conf'
       - 'Loon_template.conf'
       - '.github/workflows/convert-rules.yml'
 
@@ -36,7 +35,7 @@ jobs:
         run: python scripts/convert-rules.py rules
 
       - name: Generate Stash override checklist
-        run: python scripts/generate-stash-overrides.py Loon.conf -o stash_overrides.md
+        run: python scripts/generate-stash-overrides.py Loon_template.conf -o stash_overrides.md
 
       - name: Commit generated files to main
         run: |

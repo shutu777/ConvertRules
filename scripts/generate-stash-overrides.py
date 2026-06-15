@@ -109,7 +109,7 @@ def append_plugins(
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("loon_conf", nargs="?", default="Loon.conf")
+    parser.add_argument("loon_conf", nargs="?", default="Loon_template.conf")
     parser.add_argument("-o", "--output", default="stash_overrides.md")
     args = parser.parse_args()
 
