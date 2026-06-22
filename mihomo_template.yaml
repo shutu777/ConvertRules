@@ -15,9 +15,8 @@ pr: &pr
       自动选择,
       花云节点,
       奶昔节点,
-      亏本节点,
       全部节点,
-      直连,
+      直连
     ]
 
 # 这里是订阅更新和延迟测试相关的
@@ -45,14 +44,6 @@ proxy-providers:
   Nexitally:
     <<: *p
     url: ""
-  Kuiben:
-    <<: *p
-    url: ""
-    # 节点前缀，便于区分
-    override:
-      additional-prefix: "亏本 "
-    # 过滤流量广告节点
-    exclude-filter: "剩余流量|套餐到期"
 
 # 用于下载订阅时指定UA 内核名字
 global-ua: ClashMeta
@@ -143,9 +134,9 @@ tun:
   enable: true
   # tun 模式堆栈,如无使用问题,建议使用 mixed栈,默认 gvisor
   # 可用值： system/gvisor/mixed
-  stack: mixed
+  stack: system
   # 最大传输单元,会影响极限状态下的速率,一般用户默认即可
-  mtu: 9000
+  mtu: 1500
   # dns 劫持,将匹配到的连接导入内部 dns 模块,不书写协议则为 udp://
   dns-hijack:
     - "any:53"
@@ -180,6 +171,17 @@ dns:
     - "+.lan"
     - "+.local"
     - "+.tymd.fun"
+    - "+.81372500.xyz"
+    # 字节 / 抖音补充
+    - "+.snssdk.com"
+    - "+.byteimg.com"
+    - "+.pstatp.com"
+    - "+.bytedance.com"
+    - "+.bytedance.net"
+    - "+.volces.com"
+    - "+.volcengine.com"
+    - "+.toutiao.com"
+    - "+.toutiaostatic.com"
     - "rule-set:private,cn_domain,accelerator_cn_domain,games_domain,personal_domain"
   # 统一使用运行商上游的dns
   default-nameserver:
@@ -213,9 +215,8 @@ proxy-groups:
         自动选择,
         花云节点,
         奶昔节点,
-        亏本节点,
         全部节点,
-        直连,
+        直连
       ]
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Global.png"
 
@@ -334,13 +335,6 @@ proxy-groups:
     filter: "^((?!(直连)).)*$"
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Nex.png"
 
-  - name: 亏本节点
-    type: select
-    use:
-      - Kuiben
-    filter: "^((?!(直连)).)*$"
-    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Vpn.png"
-
   - name: 全部节点
     type: select
     include-all: true
@@ -361,6 +355,16 @@ rules:
   - RULE-SET,private,直连
   - RULE-SET,personal_domain,直连
   - DOMAIN-SUFFIX,gorafie.com,直连 # 弹幕api
+  # 字节 / 抖音补充
+  - DOMAIN-SUFFIX,snssdk.com,直连
+  - DOMAIN-SUFFIX,byteimg.com,直连
+  - DOMAIN-SUFFIX,pstatp.com,直连
+  - DOMAIN-SUFFIX,bytedance.com,直连
+  - DOMAIN-SUFFIX,bytedance.net,直连
+  - DOMAIN-SUFFIX,volces.com,直连
+  - DOMAIN-SUFFIX,volcengine.com,直连
+  - DOMAIN-SUFFIX,toutiao.com,直连
+  - DOMAIN-SUFFIX,toutiaostatic.com,直连
 
   # 全球指定分流
   # mediahelp
