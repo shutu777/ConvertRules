@@ -1,5 +1,4 @@
-# Stash 配置
-# 基于 mihomo.yaml 复制生成；分流 rules 保持原 mihomo 顺序与策略归属不变。
+# Stash 配置（iOS / macOS 通用）
 mode: rule
 log-level: info
 
@@ -8,24 +7,22 @@ log-level: info
 pr: &pr
   type: select
   proxies:
-    [
-      节点选择,
-      香港节点,
-      台湾节点,
-      日本节点,
-      新加坡节点,
-      美国节点,
-      香港故转,
-      香港自动,
-      自动选择,
-      花云节点,
-      奶昔节点,
-      良心云节点,
-      johnny节点,
-      亏本节点,
-      全部节点,
-      直连
-    ]
+    - 节点选择
+    - 香港节点
+    - 台湾节点
+    - 日本节点
+    - 新加坡节点
+    - 美国节点
+    - 香港故转
+    - 香港自动
+    - 自动选择
+    - 花云节点
+    - 奶昔节点
+    - 良心云节点
+    - johnny节点
+    - 亏本节点
+    - 全部节点
+    - 直连
 
 # 这里是订阅更新和延迟测试相关的
 p: &p
@@ -34,7 +31,7 @@ p: &p
   health-check:
     enable: true
     url: "https://www.gstatic.com/generate_204"
-    interval: 300
+    interval: 600
   proxy: 直连
 
 ######### 锚点 end #######
@@ -81,10 +78,6 @@ port: 7890
 socks-port: 7891
 # 混合端口是一个特殊的端口,它同时支持 HTTP(S) 和 SOCKS5 协议。您可以使用任何支持 HTTP 或 SOCKS 代理的程序连接到这个端口
 mixed-port: 7892
-# redirect 透明代理端口,仅能代理 TCP 流量
-redir-port: 7893
-# tproxy 透明代理端口,可代理 TCP 与 UDP 流量
-tproxy-port: 7894
 ipv6: false
 # 允许其他设备经过 Clash 的代理端口访问互联网
 allow-lan: true
@@ -93,28 +86,10 @@ unified-delay: true
 # tcp并发
 tcp-concurrent: true
 
-# 更改 geoip 使用文件,mmdb 或者 dat,可选 true/false,true为 dat,此项有默认值 false
-geodata-mode: false
-# GEO 文件加载模式
-geodata-loader: memconservative
-# 自动更新 GEO
-geo-auto-update: false
-# 更新间隔,单位为小时
-geo-update-interval: 24
-# 自定 GEO 下载地址
-geox-url:
-  geoip: "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat"
-  geosite: "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
-  mmdb: "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/country-lite.mmdb"
-  asn: "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
 
-# UI
-external-controller: 0.0.0.0:9090
+# API 控制器：本机访问更安全；如需局域网 Dashboard 再改回 0.0.0.0:9090
+external-controller: 127.0.0.1:9090
 secret: "shutu736"
-external-ui: ui
-external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip"
-
-# 匹配进程 always/strict/off
 find-process-mode: off
 global-client-fingerprint: chrome
 keep-alive-idle: 600
@@ -127,38 +102,17 @@ profile:
   # 储存 fakeip 映射表,域名再次发生连接时,使用原有映射地址
   store-fake-ip: true
 
-# 流量嗅探 奈飞流媒体专用
+# 流量嗅探：当前关闭，减少后台开销与误嗅探
 sniffer:
-  # 是否启用 sniffer
   enable: false
-  sniff:
-    HTTP:
-      ports: [80, 8080-8880]
-      # 覆盖全局override-destination设置
-      override-destination: true
-    TLS:
-      ports: [443, 8443]
-    QUIC:
-      ports: [443, 8443]
-  # 强制进行嗅探的域名列表,使用域名通配
-  force-domain:
-    - +.v2ex.com
-  # 跳过嗅探的域名列表,使用域名通配
-  skip-domain:
-    - "+.baidu.com"
-    - "Mijia Cloud"
-    - "dlg.io.mi.com"
-    - "+.push.apple.com"
-    - "+.apple.com"
 
-# 代理模式 只有裸核运行时才会生效
+# TUN：iOS / macOS 使用 system 栈，兼顾性能和稳定性
 tun:
   enable: true
-  # tun 模式堆栈,如无使用问题,建议使用 mixed栈,默认 gvisor
-  # 可用值： system/gvisor/mixed
-  stack: mixed
+  # 可用值：system / gvisor / mixed
+  stack: system
   # 最大传输单元,会影响极限状态下的速率,一般用户默认即可
-  mtu: 9000
+  mtu: 1500
   # dns 劫持,将匹配到的连接导入内部 dns 模块,不书写协议则为 udp://
   dns-hijack:
     - "any:53"
@@ -194,8 +148,25 @@ dns:
     - "+.local"
     - "+.tymd.fun"
     - "+.81372500.xyz"
+    # Apple / iCloud / 推送 / 时间同步 / 网络认证
+    - "+.apple.com"
+    - "+.icloud.com"
+    - "+.push.apple.com"
+    - "time.apple.com"
+    - "time-ios.apple.com"
+    - "captive.apple.com"
+    # 字节 / 抖音补充
+    - "+.snssdk.com"
+    - "+.byteimg.com"
+    - "+.pstatp.com"
+    - "+.bytedance.com"
+    - "+.bytedance.net"
+    - "+.volces.com"
+    - "+.volcengine.com"
+    - "+.toutiao.com"
+    - "+.toutiaostatic.com"
     - "rule-set:private,cn_domain,accelerator_cn_domain,games_domain,personal_domain"
-  # 统一使用运行商上游的dns
+  # 固定国内 DNS，不使用 system，避免不同 Wi-Fi / 蜂窝下解析结果漂移
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
@@ -210,29 +181,27 @@ proxies:
   - name: "直连"
     type: direct
     udp: true
-    
+
 # 策略组
 proxy-groups:
   - name: 节点选择
     type: select
     proxies:
-      [
-        香港节点,
-        台湾节点,
-        日本节点,
-        新加坡节点,
-        美国节点,
-        香港故转,
-        香港自动,
-        自动选择,
-        花云节点,
-        奶昔节点,
-        良心云节点,
-        johnny节点,
-        亏本节点,
-        全部节点,
-        直连
-      ]
+      - 香港节点
+      - 台湾节点
+      - 日本节点
+      - 新加坡节点
+      - 美国节点
+      - 香港故转
+      - 香港自动
+      - 自动选择
+      - 花云节点
+      - 奶昔节点
+      - 良心云节点
+      - johnny节点
+      - 亏本节点
+      - 全部节点
+      - 直连
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Global.png"
 
   - name: YouTube
@@ -265,11 +234,9 @@ proxy-groups:
   - name: Telegram
     <<: *pr
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Telegram.png"
-  
   - name: Netflix
     <<: *pr
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Netflix.png"
-  
   - name: Speedtest
     <<: *pr
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Speedtest.png"
@@ -315,24 +282,24 @@ proxy-groups:
   - name: 香港故转
     type: fallback
     include-all: true
-    tolerance: 50
-    interval: 300
+    tolerance: 100
+    interval: 600
     filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/HK.png"
 
   - name: 香港自动
     type: url-test
     include-all: true
-    tolerance: 50
-    interval: 300
+    tolerance: 100
+    interval: 600
     filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/HK.png"
 
   - name: 自动选择
     type: url-test
     include-all: true
-    tolerance: 50
-    interval: 300
+    tolerance: 100
+    interval: 600
     filter: "^((?!(直连)).)*$"
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Auto.png"
 
@@ -380,17 +347,36 @@ proxy-groups:
   - name: 漏网之鱼
     type: select
     proxies:
-      [节点选择, 直连, 香港故转, 香港节点, 香港自动, 自动选择, 台湾节点, 日本节点, 新加坡节点, 美国节点, 全部节点]
+      - 节点选择
+      - 直连
+      - 香港故转
+      - 香港节点
+      - 香港自动
+      - 自动选择
+      - 台湾节点
+      - 日本节点
+      - 新加坡节点
+      - 美国节点
+      - 全部节点
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Final.png"
 
 # 路由规则
 rules:
   # 直连
   - RULE-SET,private_ip,直连,no-resolve
-  - IP-CIDR,156.225.19.0/8,直连,no-resolve
   - RULE-SET,private,直连
   - RULE-SET,personal_domain,直连
   - DOMAIN-SUFFIX,gorafie.com,直连 # 弹幕api
+  # 字节 / 抖音补充
+  - DOMAIN-SUFFIX,snssdk.com,直连
+  - DOMAIN-SUFFIX,byteimg.com,直连
+  - DOMAIN-SUFFIX,pstatp.com,直连
+  - DOMAIN-SUFFIX,bytedance.com,直连
+  - DOMAIN-SUFFIX,bytedance.net,直连
+  - DOMAIN-SUFFIX,volces.com,直连
+  - DOMAIN-SUFFIX,volcengine.com,直连
+  - DOMAIN-SUFFIX,toutiao.com,直连
+  - DOMAIN-SUFFIX,toutiaostatic.com,直连
 
   # 全球指定分流
   # mediahelp
@@ -425,10 +411,9 @@ rules:
   - MATCH,漏网之鱼
 
 rule-anchor:
-  ip: &ip { type: http, interval: 86400, behavior: ipcidr, format: mrs }
-  domain: &domain { type: http, interval: 86400, behavior: domain, format: mrs }
-  text: &text { type: http, interval: 86400, behavior: domain, format: text }
-  yaml: &yaml { type: http, interval: 86400, behavior: classical, format: yaml }
+  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: mrs}
+  domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
+  yaml: &yaml {type: http, interval: 86400, behavior: classical, format: yaml}
 rule-providers:
   private:
     <<: *domain

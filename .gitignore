@@ -20,4 +20,5 @@ docker-compose.yml
 Loon-Johnny.conf
 personal_domain.yaml
 stash.yaml
+stash_johnny.yaml
 .DS_Store
