@@ -14,12 +14,15 @@ pr: &pr
     - 新加坡节点
     - 美国节点
     - 香港故转
+    - 日本故转
+    - 美国故转
     - 香港自动
     - 自动选择
+    - johnny节点
+    - 肯の机节点
     - 花云节点
     - 奶昔节点
     - 良心云节点
-    - johnny节点
     - 亏本节点
     - 全部节点
     - 直连
@@ -38,6 +41,12 @@ p: &p
 
 # 机场订阅,名称不能重复
 proxy-providers:
+  johnny:
+    <<: *p
+    url: ""
+  KenNoJi:
+    <<: *p
+    url: ""
   Flower:
     <<: *p
     url: ""
@@ -50,9 +59,6 @@ proxy-providers:
     <<: *p
     url: ""
   良心云:
-    <<: *p
-    url: ""
-  johnny:
     <<: *p
     url: ""
   Kuiben:
@@ -88,7 +94,7 @@ tcp-concurrent: true
 
 
 # API 控制器：本机访问更安全；如需局域网 Dashboard 再改回 0.0.0.0:9090
-external-controller: 127.0.0.1:9090
+external-controller: 0.0.0.0:9090
 secret: "shutu736"
 find-process-mode: off
 global-client-fingerprint: chrome
@@ -193,12 +199,15 @@ proxy-groups:
       - 新加坡节点
       - 美国节点
       - 香港故转
+      - 日本故转
+      - 美国故转
       - 香港自动
       - 自动选择
+      - johnny节点
+      - 肯の机节点
       - 花云节点
       - 奶昔节点
       - 良心云节点
-      - johnny节点
       - 亏本节点
       - 全部节点
       - 直连
@@ -281,27 +290,66 @@ proxy-groups:
 
   - name: 香港故转
     type: fallback
-    include-all: true
-    tolerance: 100
-    interval: 600
-    filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"
+    use:
+      - johnny
+      - KenNoJi
+      - Flower
+    tolerance: 50
+    interval: 300
+    filter: "(?i)港|hk|hongkong|hong kong"
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/HK.png"
+
+  - name: 日本故转
+    type: fallback
+    use:
+      - johnny
+      - KenNoJi
+      - Flower
+    tolerance: 50
+    interval: 300
+    filter: "(?i)日|jp|japan"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/JP.png"
+
+  - name: 美国故转
+    type: fallback
+    use:
+      - johnny
+      - KenNoJi
+      - Flower
+    tolerance: 50
+    interval: 300
+    filter: "(?i)美|us|unitedstates|united states"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/US.png"
 
   - name: 香港自动
     type: url-test
     include-all: true
-    tolerance: 100
-    interval: 600
+    tolerance: 50
+    interval: 300
     filter: "(?=.*(港|HK|(?i)Hong))^((?!(台|日|韩|新|深|美)).)*$"
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/HK.png"
 
   - name: 自动选择
     type: url-test
     include-all: true
-    tolerance: 100
-    interval: 600
+    tolerance: 50
+    interval: 300
     filter: "^((?!(直连)).)*$"
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Auto.png"
+
+  - name: johnny节点
+    type: select
+    use:
+      - johnny
+    filter: "^((?!(直连)).)*$"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Vpn.png"
+
+  - name: 肯の机节点
+    type: select
+    use:
+      - KenNoJi
+    filter: "^((?!(直连)).)*$"
+    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Vpn.png"
 
   - name: 花云节点
     type: select
@@ -324,13 +372,6 @@ proxy-groups:
     filter: "^((?!(直连)).)*$"
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Vpn.png"
 
-  - name: johnny节点
-    type: select
-    use:
-      - johnny
-    filter: "^((?!(直连)).)*$"
-    icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Vpn.png"
-
   - name: 亏本节点
     type: select
     use:
@@ -347,17 +388,7 @@ proxy-groups:
   - name: 漏网之鱼
     type: select
     proxies:
-      - 节点选择
-      - 直连
-      - 香港故转
-      - 香港节点
-      - 香港自动
-      - 自动选择
-      - 台湾节点
-      - 日本节点
-      - 新加坡节点
-      - 美国节点
-      - 全部节点
+      [节点选择, 直连, 香港故转, 日本故转, 美国故转, 香港节点, 香港自动, 自动选择, 台湾节点, 日本节点, 新加坡节点, 美国节点, 全部节点]
     icon: "https://cdn.jsdelivr.net/gh/Orz-3/mini@master/Color/Final.png"
 
 # 路由规则
