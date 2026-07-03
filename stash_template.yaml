@@ -50,11 +50,7 @@ proxy-providers:
   Flower:
     <<: *p
     url: ""
-    # 节点前缀，便于区分
-    override:
-      additional-prefix: "花云 "
-    # 过滤流量广告节点
-    exclude-filter: "Traffic|Expire"
+    filter: "^(?!.*(流量|剩余|到期|套餐|Traffic|Expire)).*$"
   Nexitally:
     <<: *p
     url: ""
@@ -64,11 +60,7 @@ proxy-providers:
   Kuiben:
     <<: *p
     url: ""
-    # 节点前缀，便于区分
-    override:
-      additional-prefix: "亏本 "
-    # 过滤流量广告节点
-    exclude-filter: "剩余流量|套餐到期"
+    filter: "^(?!.*(流量|剩余|到期|套餐|Traffic|Expire)).*$"
 
 # 用于下载订阅时指定UA 内核名字
 global-ua: ClashMeta
