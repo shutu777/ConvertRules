@@ -542,7 +542,7 @@ rule-providers:
     url: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.mrs"
   personal_domain:
     <<: *yaml
-    url: "https://sub.shutu736.me/share/file/personal?token=K150MHwC_9AxQ4iy-Dvo0"
+    url: "https://sub.94666.xyz/share/file/personal?token=K150MHwC_9AxQ4iy-Dvo0"
 
   private_ip:
     <<: *ip
