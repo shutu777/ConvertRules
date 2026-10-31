@@ -25,3 +25,5 @@ DOMAIN-SUFFIX,v1iptv.com,no-resolve
 DOMAIN-SUFFIX,minij.com,no-resolve
 DOMAIN-SUFFIX,ciallo.ee,no-resolve
 DOMAIN-SUFFIX,guanchaotv.com,no-resolve
+DOMAIN-SUFFIX,po0.io,no-resolve
+IP-CIDR,81.68.219.6/32
