@@ -104,6 +104,7 @@ DOMAIN,copilot-telemetry-service.githubusercontent.com
 DOMAIN,copilot-telemetry.githubusercontent.com
 DOMAIN,copilot-workspace.githubnext.com
 DOMAIN,copilotprodattachments.blob.core.windows.net
+DOMAIN,courses.myecnu.org
 DOMAIN,crl.microsoft.com
 DOMAIN,crl.versign.net
 DOMAIN,csis-prod.s3.amazonaws.com
@@ -845,8 +846,8 @@ DOMAIN-SUFFIX,aws
 DOMAIN-SUFFIX,apple
 DOMAIN-SUFFIX,android
 DOMAIN-SUFFIX,amazon
-DOMAIN-SUFFIX,jetbrains.dev
-DOMAIN-SUFFIX,note.com
+DOMAIN-SUFFIX,jetbrains.cloud
+DOMAIN-SUFFIX,dnaav.com
 DOMAIN-SUFFIX,12joursdecadeauxdeitunes.com
 DOMAIN-SUFFIX,12vpn.com
 DOMAIN-SUFFIX,12vpn.net
@@ -5576,6 +5577,7 @@ DOMAIN-SUFFIX,yinya.shop
 DOMAIN-SUFFIX,cabletvdirectv.com
 DOMAIN-SUFFIX,cachefly.com
 DOMAIN-SUFFIX,cachefly.net
+DOMAIN-SUFFIX,cachix.org
 DOMAIN-SUFFIX,cacnw.com
 DOMAIN-SUFFIX,cactusvpn.com
 DOMAIN-SUFFIX,cad-mep.com
@@ -7782,7 +7784,7 @@ DOMAIN-SUFFIX,y2mate.com
 DOMAIN-SUFFIX,dmm.com
 DOMAIN-SUFFIX,dmmapis.com
 DOMAIN-SUFFIX,dmmrex.com
-DOMAIN-SUFFIX,dnaav.com
+DOMAIN-SUFFIX,jintian.net
 DOMAIN-SUFFIX,dnai.in
 DOMAIN-SUFFIX,dnaindia.com
 DOMAIN-SUFFIX,dnaspaces.io
@@ -8380,7 +8382,7 @@ DOMAIN-SUFFIX,ebayincconnectedcommerce.net
 DOMAIN-SUFFIX,ebayinkblog.com
 DOMAIN-SUFFIX,ebayinternetsalestax.com
 DOMAIN-SUFFIX,ebayit.com
-DOMAIN-SUFFIX,ebayjewelry.com
+DOMAIN-SUFFIX,jinx.com
 DOMAIN-SUFFIX,ebayjob.com
 DOMAIN-SUFFIX,ebayla.org
 DOMAIN-SUFFIX,ebaylisting.com
@@ -9413,10 +9415,12 @@ DOMAIN-SUFFIX,fastindianporn.com
 DOMAIN-SUFFIX,fastlane.ci
 DOMAIN-SUFFIX,fastlane.tools
 DOMAIN-SUFFIX,fastly-edge.com
+DOMAIN-SUFFIX,fastly-insights.com
 DOMAIN-SUFFIX,fastly-terrarium.com
 DOMAIN-SUFFIX,fastly.com
 DOMAIN-SUFFIX,fastly.io
 DOMAIN-SUFFIX,fastly.net
+DOMAIN-SUFFIX,fastlydns.net
 DOMAIN-SUFFIX,fastlylabs.com
 DOMAIN-SUFFIX,fastlylb.net
 DOMAIN-SUFFIX,fastpic.ru
@@ -10025,7 +10029,7 @@ DOMAIN-SUFFIX,xvideos.red
 DOMAIN-SUFFIX,foxsports.pe
 DOMAIN-SUFFIX,foxsports.sv
 DOMAIN-SUFFIX,foxsports.uy
-DOMAIN-SUFFIX,foxsports2.com
+DOMAIN-SUFFIX,jinrizhiyi.news
 DOMAIN-SUFFIX,foxsportsflorida.com
 DOMAIN-SUFFIX,foxsportsgo.com
 DOMAIN-SUFFIX,foxsportsla.com
@@ -10580,6 +10584,7 @@ DOMAIN-SUFFIX,xuchao.net
 DOMAIN-SUFFIX,gemfire.net
 DOMAIN-SUFFIX,gemfury.com
 DOMAIN-SUFFIX,gemini.com
+DOMAIN-SUFFIX,gemma.ai
 DOMAIN-SUFFIX,xu97.vip
 DOMAIN-SUFFIX,genbank.ru
 DOMAIN-SUFFIX,gencraft.com
@@ -13996,9 +14001,9 @@ DOMAIN-SUFFIX,jerkofftocelebs.com
 DOMAIN-SUFFIX,xboxab.com
 DOMAIN-SUFFIX,jessicaturner.com
 DOMAIN-SUFFIX,jetbrains.ai
-DOMAIN-SUFFIX,jetbrains.cloud
-DOMAIN-SUFFIX,jetbrains.com
 DOMAIN-SUFFIX,000webhost.com
+DOMAIN-SUFFIX,jetbrains.com
+DOMAIN-SUFFIX,jetbrains.dev
 DOMAIN-SUFFIX,jetbrains.net
 DOMAIN-SUFFIX,jetbrains.org
 DOMAIN-SUFFIX,jetbrains.ru
@@ -14033,16 +14038,16 @@ DOMAIN-SUFFIX,jilhub.com
 DOMAIN-SUFFIX,jimeng22.com
 DOMAIN-SUFFIX,jims.net
 DOMAIN-SUFFIX,jingpin.org
-DOMAIN-SUFFIX,paofuyun.me
+DOMAIN-SUFFIX,foxsports2.com
 DOMAIN-SUFFIX,12diasderegalosdeitunes.pe
-DOMAIN-SUFFIX,jiuse.icu
+DOMAIN-SUFFIX,ebayjewelry.com
 DOMAIN-SUFFIX,jira-tcsbank.ru
 DOMAIN-SUFFIX,jira.com
 DOMAIN-SUFFIX,jitouch.com
 DOMAIN-SUFFIX,jitsi.org
 DOMAIN-SUFFIX,jiuse.ai
 DOMAIN-SUFFIX,xbox360.com
-DOMAIN-SUFFIX,jinx.com
+DOMAIN-SUFFIX,jiuse.icu
 DOMAIN-SUFFIX,jiuse.io
 DOMAIN-SUFFIX,jiuse6666.com
 DOMAIN-SUFFIX,jiuse821.com
@@ -17693,7 +17698,7 @@ DOMAIN-SUFFIX,norsk.mobi
 DOMAIN-SUFFIX,norton.com
 DOMAIN-SUFFIX,norvikbank.ru
 DOMAIN-SUFFIX,nos.nl
-DOMAIN-SUFFIX,jintian.net
+DOMAIN-SUFFIX,note.com
 DOMAIN-SUFFIX,notegpt.io
 DOMAIN-SUFFIX,notepad-plus-plus.org
 DOMAIN-SUFFIX,noticias-rt.com
@@ -18515,7 +18520,7 @@ DOMAIN-SUFFIX,panoramio.com
 DOMAIN-SUFFIX,pantswalker.net
 DOMAIN-SUFFIX,pao-pao.net
 DOMAIN-SUFFIX,paofu.cloud
-DOMAIN-SUFFIX,jinrizhiyi.news
+DOMAIN-SUFFIX,paofuyun.me
 DOMAIN-SUFFIX,paon.site
 DOMAIN-SUFFIX,papalah.com
 DOMAIN-SUFFIX,papermc.io
@@ -24646,6 +24651,7 @@ DOMAIN-SUFFIX,viu.com
 DOMAIN-SUFFIX,viu.tv
 DOMAIN-SUFFIX,vivaldi.com
 DOMAIN-SUFFIX,vivaxnxx.com
+DOMAIN-SUFFIX,vivox.com
 DOMAIN-SUFFIX,vivthomas.com
 DOMAIN-SUFFIX,vixen.com
 DOMAIN-SUFFIX,vixengroup.com
